@@ -16,33 +16,28 @@ class AuthController extends Controller
      */
     public function sendOtp(Request $request)
     {
-        $request->validate([
-            'phone' => 'required|string'
-        ]);
+        $request->validate(['phone' => 'required']);
 
-        // ✅ OTP logic by environment
         if (app()->environment('local')) {
             $otp = '123456';
         } else {
             $otp = rand(100000, 999999);
-            $this->sendFast2Sms($request->phone, $otp);
+            // 🔴 Call Fast2SMS here
         }
 
         Otp::updateOrCreate(
             ['phone' => $request->phone],
             [
                 'otp' => $otp,
-                'expires_at' => Carbon::now()->addMinutes(5),
+                'expires_at' => now()->addMinutes(5)
             ]
         );
 
-        // Log OTP in local for dev
-        \Log::info("OTP for {$request->phone} is {$otp}");
+        \Log::info("OTP for {$request->phone}: {$otp}");
 
-        return response()->json([
-            'message' => 'OTP sent successfully'
-        ]);
+        return response()->json(['message' => 'OTP sent']);
     }
+
 
     /**
      * VERIFY OTP & LOGIN / REGISTER
@@ -125,4 +120,23 @@ class AuthController extends Controller
     {
         return response()->json($request->user());
     }
+    public function completeProfile(Request $request)
+{
+    $request->validate([
+        'name' => 'required|string',
+        'email' => 'required|email|unique:users,email,' . $request->user()->id,
+    ]);
+
+    $user = $request->user();
+    $user->update([
+        'name' => $request->name,
+        'email' => $request->email,
+    ]);
+
+    return response()->json([
+        'message' => 'Profile completed',
+        'user' => $user
+    ]);
+}
+
 }
