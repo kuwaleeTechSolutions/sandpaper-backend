@@ -8,6 +8,7 @@ use App\Models\Otp;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
@@ -33,7 +34,7 @@ class AuthController extends Controller
             ]
         );
 
-        \Log::info("OTP for {$request->phone}: {$otp}");
+        Log::info("OTP for {$request->phone}: {$otp}");
 
         return response()->json(['message' => 'OTP sent']);
     }

@@ -15,9 +15,13 @@ return new class extends Migration
             $table->id();
             $table->foreignId('course_id')->constrained()->cascadeOnDelete();
             $table->string('name'); // Morning Batch
+            $table->string('description')->nullable();
             $table->date('start_date');
             $table->date('end_date')->nullable();
+            $table->text('batch_image')->nullable();
+            $table->json('additional_field')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

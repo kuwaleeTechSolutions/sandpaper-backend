@@ -17,7 +17,10 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->integer('duration_months')->nullable();
             $table->integer('price')->nullable();
+            $table->text('course_image')->nullable();
+            $table->json('additional_field')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
