@@ -16,8 +16,9 @@ return new class extends Migration
             $table->foreignId('course_id')->constrained('courses');
             $table->string('name'); // Morning Batch
             $table->string('description')->nullable();
-            $table->date('start_date');
+            $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
+            $table->string('duration')->nullable();
             $table->integer('total_seats')->default(0);
             $table->text('batch_image')->nullable();
             $table->string('base_price')->nullable();
