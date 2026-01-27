@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\DashboardController;
 
 Route::get('/ping', function () {
     return response()->json(['status' => 'API working']);
@@ -16,6 +17,7 @@ Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
+    Route::get('/dashboard', [DashboardController::class, 'index']);
 });
 
 
