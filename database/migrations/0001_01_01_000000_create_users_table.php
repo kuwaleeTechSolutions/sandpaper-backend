@@ -21,6 +21,7 @@ return new class extends Migration
             $table->integer('current_role_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
+            $table->boolean('is_active')->default(true);
             $table->softDeletes();
         });
 

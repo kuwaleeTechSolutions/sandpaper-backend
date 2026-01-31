@@ -16,10 +16,10 @@ return new class extends Migration
             $table->string('title'); // APSC Prelims 2026
             $table->text('description')->nullable();
             $table->integer('duration_months')->nullable();
-            $table->integer('price')->nullable();
             $table->text('course_image')->nullable();
             $table->json('additional_field')->nullable();
             $table->timestamps();
+            $table->boolean('is_active')->default(true);
             $table->softDeletes();
         });
     }
