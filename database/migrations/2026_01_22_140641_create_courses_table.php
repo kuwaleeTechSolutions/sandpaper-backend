@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('duration_months')->nullable();
             $table->text('course_image')->nullable();
             $table->json('additional_field')->nullable();
+            $table->foreignId('created_by')->constrained('users');
             $table->timestamps();
             $table->boolean('is_active')->default(true);
             $table->softDeletes();
