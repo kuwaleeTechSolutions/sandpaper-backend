@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Api\UserDetailController;
 
 Route::get('/ping', function () {
     return response()->json(['status' => 'API working']);
@@ -34,3 +35,5 @@ Route::middleware('auth:sanctum')->post(
 );
 
 
+// Rituraj Code--
+Route::post('/user-details', [UserDetailController::class, 'store']);
