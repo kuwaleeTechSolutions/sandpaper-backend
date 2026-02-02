@@ -80,18 +80,18 @@ class UserDetailController extends Controller
         ], 200);
     }
 
-   private function generateRegNo(): string
+    private function generateRegNo(): string
     {
         $year = date('Y');
 
         // Get last reg_no for current year
-        $lastRecord = \App\Models\UserDetail::where('reg_no', 'like', '%/' . $year)
+        $lastRecord = \App\Models\UserDetail::where('reg_no', 'like', 'SDP/' . $year . '/%')
             ->orderBy('id', 'desc')
             ->first();
 
         if ($lastRecord && $lastRecord->reg_no) {
-            // Extract numeric part before "/"
-            preg_match('/^(\d{6})\/\d{4}$/', $lastRecord->reg_no, $matches);
+            // Extract last 4-digit number
+            preg_match('/SDP\/' . $year . '\/(\d{4})$/', $lastRecord->reg_no, $matches);
             $lastNumber = isset($matches[1]) ? (int) $matches[1] : 0;
         } else {
             $lastNumber = 0;
@@ -99,7 +99,8 @@ class UserDetailController extends Controller
 
         $nextNumber = $lastNumber + 1;
 
-        return str_pad($nextNumber, 6, '0', STR_PAD_LEFT) . '/' . $year;
+        return 'SDP/' . $year . '/' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
     }
+
 
 }

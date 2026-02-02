@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Api\UserDetailController;
+use App\Http\Controllers\Api\AdminUserController;
 
 Route::get('/ping', function () {
     return response()->json(['status' => 'API working']);
@@ -19,6 +20,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
     Route::get('/dashboard', [DashboardController::class, 'index']);
+
+
+    // Rituraj Code--
+    Route::post('/user-details', [UserDetailController::class, 'store']);
+    Route::get('/users', [AdminUserController::class, 'index']);
+    Route::get('/users/{id}', [AdminUserController::class, 'show']);
+    Route::post('/users/{id}/toggle-status', [AdminUserController::class, 'toggleStatus']);
 });
 
 
@@ -34,6 +42,3 @@ Route::middleware('auth:sanctum')->post(
     [AuthController::class, 'completeProfile']
 );
 
-
-// Rituraj Code--
-Route::post('/user-details', [UserDetailController::class, 'store']);
