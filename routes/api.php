@@ -5,6 +5,9 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Api\TestController;
+use App\Http\Controllers\Api\TestAttemptController;
+use App\Http\Controllers\Api\Admin\TestManagementController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,19 +42,62 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index']);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Student Test Flow
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/tests', [TestController::class, 'index']);          // list published tests
+    Route::get('/tests/{id}', [TestController::class, 'show']);      // test details
+
+    Route::post('/tests/{id}/start', [TestAttemptController::class, 'start']);
+    Route::post('/attempts/{id}/answer', [TestAttemptController::class, 'answer']);
+    Route::post('/attempts/{id}/submit', [TestAttemptController::class, 'submit']);
 });
 
+/*
+|--------------------------------------------------------------------------
+| Admin Routes
+|--------------------------------------------------------------------------
+*/
+Route::middleware('auth:sanctum')
+    ->prefix('admin')
+    ->group(function () {
 
+    /*
+    |--------------------------------------------------------------------------
+    | Question Bank
+    |--------------------------------------------------------------------------
+    */
+    Route::post('/questions', [TestManagementController::class, 'createQuestion']);
+    Route::get('/questions', [TestManagementController::class, 'listQuestions']);
+    // optional later:
+    // Route::get('/questions');
+    // Route::delete('/questions/{id}');
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+    /*
+    |--------------------------------------------------------------------------
+    | Question Sets
+    |--------------------------------------------------------------------------
+    */
+    Route::post('/question-sets', [TestManagementController::class, 'createQuestionSet']);
+    // optional later:
+    // Route::get('/question-sets');
+    // Route::get('/question-sets/{id}');
+    Route::get('/question-sets', function () {
+        return \App\Models\QuestionSet::select('id', 'name')
+            ->orderBy('created_at', 'desc')
+            ->get();
+    });
+    
+
+    /*
+    |--------------------------------------------------------------------------
+    | Tests
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/tests', [TestManagementController::class, 'index']);
+    Route::post('/tests', [TestManagementController::class, 'createTest']);
+    Route::post('/tests/{id}/publish', [TestManagementController::class, 'publish']);
 });
-
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
-Route::middleware('auth:sanctum')->post(
-    '/complete-profile',
-    [AuthController::class, 'completeProfile']
-);
-
-
