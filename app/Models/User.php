@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 
 
@@ -44,5 +45,15 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    public function userdetail()
+    {
+        $this->hasOne(UserDetail::class,'user_id')->withDefault();
+    }
+    public function createdby(){
+        return $this->belongsTo(User::class,'created_by')->withDefault();
+    }
+    public function currentrole(){
+        $this->belongsTo(Role::class,'current_role_id')->withDefault();
     }
 }
