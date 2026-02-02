@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Api\UserDetailController;
+use App\Http\Controllers\Api\AdminUserController;
 use App\Http\Controllers\Api\TestController;
 use App\Http\Controllers\Api\TestAttemptController;
 use App\Http\Controllers\Api\Admin\TestManagementController;
@@ -28,11 +30,6 @@ Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-/*
-|--------------------------------------------------------------------------
-| Authenticated User Routes
-|--------------------------------------------------------------------------
-*/
 Route::middleware('auth:sanctum')->group(function () {
 
     // Auth
@@ -40,47 +37,36 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
     Route::post('/complete-profile', [AuthController::class, 'completeProfile']);
 
-    // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index']);
 
-    /*
-    |--------------------------------------------------------------------------
-    | Student Test Flow
-    |--------------------------------------------------------------------------
-    */
-    Route::get('/tests', [TestController::class, 'index']);          // list published tests
-    Route::get('/tests/{id}', [TestController::class, 'show']);      // test details
+    // Rituraj Code--
+    Route::post('/user-details', [UserDetailController::class, 'store']);
+    Route::get('/users', [AdminUserController::class, 'index']);
+    Route::get('/users/{id}', [AdminUserController::class, 'show']);
+    Route::post('/users/{id}/toggle-status', [AdminUserController::class, 'toggleStatus']);
+
+   
+    Route::get('/tests', [TestController::class, 'index']);          
+    Route::get('/tests/{id}', [TestController::class, 'show']);      
 
     Route::post('/tests/{id}/start', [TestAttemptController::class, 'start']);
     Route::post('/attempts/{id}/answer', [TestAttemptController::class, 'answer']);
     Route::post('/attempts/{id}/submit', [TestAttemptController::class, 'submit']);
 });
 
-/*
-|--------------------------------------------------------------------------
-| Admin Routes
-|--------------------------------------------------------------------------
-*/
+
 Route::middleware('auth:sanctum')
     ->prefix('admin')
     ->group(function () {
 
-    /*
-    |--------------------------------------------------------------------------
-    | Question Bank
-    |--------------------------------------------------------------------------
-    */
+    
     Route::post('/questions', [TestManagementController::class, 'createQuestion']);
     Route::get('/questions', [TestManagementController::class, 'listQuestions']);
     // optional later:
     // Route::get('/questions');
     // Route::delete('/questions/{id}');
 
-    /*
-    |--------------------------------------------------------------------------
-    | Question Sets
-    |--------------------------------------------------------------------------
-    */
+    
     Route::post('/question-sets', [TestManagementController::class, 'createQuestionSet']);
     // optional later:
     // Route::get('/question-sets');
@@ -91,12 +77,6 @@ Route::middleware('auth:sanctum')
             ->get();
     });
     
-
-    /*
-    |--------------------------------------------------------------------------
-    | Tests
-    |--------------------------------------------------------------------------
-    */
     Route::get('/tests', [TestManagementController::class, 'index']);
     Route::post('/tests', [TestManagementController::class, 'createTest']);
     Route::post('/tests/{id}/publish', [TestManagementController::class, 'publish']);
