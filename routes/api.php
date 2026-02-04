@@ -40,14 +40,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index']);
 
     // Rituraj Code--
-    Route::post('/user-details', [UserDetailController::class, 'store']);
     Route::get('/users', [AdminUserController::class, 'index']);
     Route::get('/users/{id}', [AdminUserController::class, 'show']);
     Route::post('/users/{id}/toggle-status', [AdminUserController::class, 'toggleStatus']);
+    Route::post('/add-users', [AdminUserController::class, 'store']);
 
-   
-    Route::get('/tests', [TestController::class, 'index']);          
-    Route::get('/tests/{id}', [TestController::class, 'show']);      
+    Route::get('/tests', [TestController::class, 'index']);
+    Route::get('/tests/{id}', [TestController::class, 'show']);
 
     Route::post('/tests/{id}/start', [TestAttemptController::class, 'start']);
     Route::post('/attempts/{id}/answer', [TestAttemptController::class, 'answer']);
@@ -59,14 +58,14 @@ Route::middleware('auth:sanctum')
     ->prefix('admin')
     ->group(function () {
 
-    
+
     Route::post('/questions', [TestManagementController::class, 'createQuestion']);
     Route::get('/questions', [TestManagementController::class, 'listQuestions']);
     // optional later:
     // Route::get('/questions');
     // Route::delete('/questions/{id}');
 
-    
+
     Route::post('/question-sets', [TestManagementController::class, 'createQuestionSet']);
     // optional later:
     // Route::get('/question-sets');
@@ -76,7 +75,7 @@ Route::middleware('auth:sanctum')
             ->orderBy('created_at', 'desc')
             ->get();
     });
-    
+
     Route::get('/tests', [TestManagementController::class, 'index']);
     Route::post('/tests', [TestManagementController::class, 'createTest']);
     Route::post('/tests/{id}/publish', [TestManagementController::class, 'publish']);

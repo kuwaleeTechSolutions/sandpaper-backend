@@ -33,6 +33,14 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+// App\Models\User.php
+protected $fillable = [
+    'name',
+    'email',
+    'phone',
+    'password',
+    'is_active',
+];
 
     /**
      * Get the attributes that should be cast.
@@ -46,14 +54,19 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-    public function userdetail()
+    public function userDetail()
     {
-        $this->hasOne(UserDetail::class,'user_id')->withDefault();
+        return $this->hasOne(UserDetail::class, 'user_id')->withDefault();
     }
-    public function createdby(){
-        return $this->belongsTo(User::class,'created_by')->withDefault();
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by')->withDefault();
     }
-    public function currentrole(){
-        $this->belongsTo(Role::class,'current_role_id')->withDefault();
+
+    public function currentRole()
+    {
+        return $this->belongsTo(Role::class, 'current_role_id')->withDefault();
     }
+
 }
